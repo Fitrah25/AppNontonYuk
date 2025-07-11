@@ -1,6 +1,6 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
+import React from 'react';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 interface MovieCardProps {
   id: string;
@@ -19,16 +19,25 @@ export default function MovieCard({ id, title, year, poster, type }: MovieCardPr
 
   return (
     <TouchableOpacity style={styles.card} onPress={handlePress}>
-      <Image source={{ uri: poster !== 'N/A' ? poster : 'https://via.placeholder.com/150' }} style={styles.poster} />
+      <Image
+        source={{ uri: poster !== 'N/A' ? poster : 'https://via.placeholder.com/150' }}
+        style={styles.poster}
+      />
       <View style={styles.infoContainer}>
-        <Text style={styles.title}>{title}</Text>
+        <View style={styles.titleRow}>
+          <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
+            {title}
+          </Text>
+          <View style={styles.movieTypeBadge}>
+            <Text style={styles.movieTypeBadgeText}>{type.toUpperCase()}</Text>
+          </View>
+        </View>
+
         <Text style={styles.year}>{year}</Text>
+
         <TouchableOpacity style={styles.button} onPress={handlePress}>
           <Text style={styles.buttonText}>Selengkapnya</Text>
         </TouchableOpacity>
-      </View>
-      <View style={styles.movieTypeBadge}>
-        <Text style={styles.movieTypeBadgeText}>{type.toUpperCase()}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -46,7 +55,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    position: 'relative',
   },
   poster: {
     width: 100,
@@ -60,11 +68,16 @@ const styles = StyleSheet.create({
     padding: 15,
     justifyContent: 'space-between',
   },
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 5,
+  },
   title: {
     fontSize: 18,
     fontWeight: 'bold',
     color: '#E0E0E0',
-    marginBottom: 5,
+    flex: 1, // agar title mengambil ruang yang tersedia
   },
   year: {
     fontSize: 14,
@@ -72,7 +85,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   button: {
-    backgroundColor: '#6A5ACD', // A pleasing purple
+    backgroundColor: '#6A5ACD',
     paddingVertical: 8,
     paddingHorizontal: 15,
     borderRadius: 20,
@@ -84,13 +97,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   movieTypeBadge: {
-    position: 'absolute',
-    top: 10,
-    right: 10,
     backgroundColor: '#FFD700', // Gold color for "MOVIE" badge
     paddingVertical: 5,
     paddingHorizontal: 10,
     borderRadius: 5,
+    marginLeft: 10,
   },
   movieTypeBadgeText: {
     color: '#333',
